@@ -41,6 +41,7 @@ export const Modal = ({children, onClose} : ModalProps) => {
         onClick={handleBackDrop}
        >
       <div className={css.modal}>
+         <button type="button" className={css.backBtn} onClick={onClose} aria-label="Close modal">Back</button>
          {children}
        </div>
      </div>, document.body

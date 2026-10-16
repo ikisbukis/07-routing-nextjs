@@ -5,7 +5,7 @@ import  {Modal} from "@/components/Modal/Modal"
 import css from "./NotePreview.module.css"
 import { useParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 
 const NotePreviewClient = () => {
@@ -13,7 +13,7 @@ const NotePreviewClient = () => {
         const router = useRouter();
 
         const {data: note, isError, isLoading } = useQuery({
-            queryKey: ['notePreview', id],
+            queryKey: ['note', id],
             queryFn: () => fetchNoteById(id),
             refetchOnMount: false
         })
@@ -24,7 +24,7 @@ const NotePreviewClient = () => {
             <>
             {isLoading && <p>Loading, please wait...</p>}
 		    {isError && <p>Something went wrong.</p>}
-            <Modal onClose={onClose}>
+            {note && <Modal onClose={onClose}>
             <main className={css.main}>	
 	<div className={css.container}>
 		<div className={css.item}>
@@ -37,9 +37,8 @@ const NotePreviewClient = () => {
 		</div>
 	</div>
 </main>
-        </Modal>
-            </>
-        
+        </Modal>}
+        </>        
     )
 }
 

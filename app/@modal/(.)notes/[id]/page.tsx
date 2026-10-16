@@ -11,7 +11,7 @@ const NoteDetailsModal = async ({params} : NoteDetailsModalProps) => {
     const queryClient = new QueryClient();
 
     queryClient.prefetchQuery({
-        queryKey: ['notePreview', id],
+        queryKey: ['note', id],
         queryFn: () => fetchNoteById(id)
     })
 
