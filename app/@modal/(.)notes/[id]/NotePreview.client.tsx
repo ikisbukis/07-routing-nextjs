@@ -1,28 +1,45 @@
 "use client"
 
 import {fetchNoteById} from "@/lib/api"
-import  ModalRoute from "@/components/ModalRoute/ModalRoute"
-import css from "./ModalRoute.module.css"
+import  {Modal} from "@/components/Modal/Modal"
+import css from "./NotePreview.module.css"
 import { useParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/router"
 
 
 const NotePreviewClient = () => {
         const {id} = useParams<{id:string}>()
+        const router = useRouter();
 
-        const {data: note} = useQuery({
+        const {data: note, isError, isLoading } = useQuery({
             queryKey: ['notePreview', id],
             queryFn: () => fetchNoteById(id),
             refetchOnMount: false
         })
 
+        const onClose = () => router.back()       
+        
         return (
-        <ModalRoute>
-          <h2>{note?.title}</h2>
-          <p className={css.tag}>{note?.tag}</p>
+            <>
+            {isLoading && <p>Loading, please wait...</p>}
+		    {isError && <p>Something went wrong.</p>}
+            <Modal onClose={onClose}>
+            <main className={css.main}>	
+	<div className={css.container}>
+		<div className={css.item}>
+		  <div className={css.header}>
+		    <h2>{note?.title}</h2>
+		  </div>
+		  <p className={css.tag}>{note?.tag}</p>
 		  <p className={css.content}>{note?.content}</p>
 		  <p className={css.date}>{note?.createdAt}</p>
-        </ModalRoute>
+		</div>
+	</div>
+</main>
+        </Modal>
+            </>
+        
     )
 }
 
